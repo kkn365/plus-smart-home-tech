@@ -29,8 +29,6 @@ public class KafkaEventProducer implements AutoCloseable {
      */
     public KafkaEventProducer(KafkaConfig kafkaConfig) {
         this.topics = kafkaConfig.getProducer().getTopics();
-
-        // Создаём продюсера используя настройки из конфигурации приложения
         this.producer = new KafkaProducer<>(kafkaConfig.getProducer().getProperties());
     }
 

@@ -23,7 +23,6 @@ public abstract class BaseSensorEventHandler<T extends SpecificRecordBase> imple
             throw new IllegalArgumentException("Неизвестный тип события: " + event.getType());
         }
 
-        // Преобразование события в Avro-запись
         T payload = mapToAvro(event);
 
         SensorEventAvro eventAvro = SensorEventAvro.newBuilder()
