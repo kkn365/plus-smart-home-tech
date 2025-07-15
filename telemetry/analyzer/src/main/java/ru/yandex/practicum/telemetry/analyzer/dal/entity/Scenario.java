@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -29,6 +30,9 @@ public class Scenario {
     private String name;
 
     @OneToMany
+    @MapKeyColumn(
+            table = "scenario_conditions",
+            name = "sensor_id")
     @JoinTable(
             name = "scenario_conditions",
             joinColumns = @JoinColumn(name = "scenario_id"),
@@ -36,6 +40,9 @@ public class Scenario {
     private Map<String, Condition> conditions = new HashMap<>();
 
     @OneToMany
+    @MapKeyColumn(
+            table = "scenario_actions",
+            name = "sensor_id")
     @JoinTable(
             name = "scenario_actions",
             joinColumns = @JoinColumn(name = "scenario_id"),

@@ -12,7 +12,8 @@ import lombok.Setter;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "actions")
 public class Action {
 
