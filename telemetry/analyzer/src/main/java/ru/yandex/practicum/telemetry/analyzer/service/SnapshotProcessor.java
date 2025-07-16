@@ -18,16 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Класс AggregationStarter, ответственный за запуск агрегации данных.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SnapshotProcessor {
     private final SnapshotAnalyser analyser;
-
-    // Хранит текущий обработанный оффсет для каждой партиции и топика
     private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
 
     // Консьюмер для получения снапшотов
@@ -52,12 +47,6 @@ public class SnapshotProcessor {
         }));
     }
 
-    /**
-     * Метод для начала процесса получения и анализа снапшотов.
-     * Подписывается на топики для получения снапшотов. Для каждого снапшота проверяет,
-     * подходит ли состояние датчиков под имеющиеся сценарии. Если подходит, то выполняет
-     * действия заложенные в сценарий. Путём отправки команд по grpc в Hub Router.
-     */
     public void start() {
         try {
             log.trace("Подписываюсь на топик \"{}\" для получения снапшотов", topics);
@@ -66,7 +55,7 @@ public class SnapshotProcessor {
             while (true) {
                 ConsumerRecords<String, SensorsSnapshotAvro> records = consumer.poll(pollTimeout);
 
-                if(!records.isEmpty()) {
+                if (!records.isEmpty()) {
                     int count = 0;
                     for (ConsumerRecord<String, SensorsSnapshotAvro> record : records) {
                         // Обрабатываем очередную запись
@@ -103,9 +92,9 @@ public class SnapshotProcessor {
                 new OffsetAndMetadata(record.offset() + 1)
         );
 
-        if(count % 100 == 0) {
+        if (count % 100 == 0) {
             consumer.commitAsync(currentOffsets, (offsets, exception) -> {
-                if(exception != null) {
+                if (exception != null) {
                     log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
                 }
             });

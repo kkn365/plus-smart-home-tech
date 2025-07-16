@@ -12,9 +12,7 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
 import ru.yandex.practicum.telemetry.analyzer.config.KafkaConfig;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.Sensor;
-import ru.yandex.practicum.telemetry.analyzer.dal.service.ScenarioService;
-import ru.yandex.practicum.telemetry.analyzer.dal.service.SensorService;
+import ru.yandex.practicum.telemetry.analyzer.model.Sensor;
 
 import java.time.Duration;
 import java.util.List;
@@ -33,8 +31,7 @@ public class HubEventProcessor implements Runnable {
         this.sensorService = sensorService;
         this.scenarioService = scenarioService;
 
-        final KafkaConfig.ConsumerConfig consumerConfig =
-                config.getConsumers().get(this.getClass().getSimpleName());
+        final KafkaConfig.ConsumerConfig consumerConfig = config.getConsumers().get(this.getClass().getSimpleName());
         this.consumer = new KafkaConsumer<>(consumerConfig.getProperties());
         this.topics = consumerConfig.getTopics();
         this.pollTimeout = consumerConfig.getPollTimeout();
@@ -56,9 +53,6 @@ public class HubEventProcessor implements Runnable {
                     for (ConsumerRecord<String, HubEventAvro> record : records) {
                         processEvent(record.value());
                     }
-                    // Добавление/удаление устройств и сценариев - редкие события.
-                    // Поэтому поток сообщений будет не интенсивный.
-                    // Так что имеет смысл фиксировать смещения синхронно.
                     consumer.commitSync();
                 }
             }
@@ -74,10 +68,10 @@ public class HubEventProcessor implements Runnable {
     private void processEvent(HubEventAvro hubEvent) {
         String hubId = hubEvent.getHubId();
         switch (hubEvent.getPayload()) {
-            case DeviceAddedEventAvro dae -> processEvent(hubId, dae);
-            case DeviceRemovedEventAvro dre -> processEvent(hubId, dre);
-            case ScenarioAddedEventAvro sae -> processEvent(hubId, sae);
-            case ScenarioRemovedEventAvro sre -> processEvent(hubId, sre);
+            case DeviceAddedEventAvro deviceAddedEventAvro -> processEvent(hubId, deviceAddedEventAvro);
+            case DeviceRemovedEventAvro deviceRemovedEventAvro -> processEvent(hubId, deviceRemovedEventAvro);
+            case ScenarioAddedEventAvro scenarioAddedEventAvro -> processEvent(hubId, scenarioAddedEventAvro);
+            case ScenarioRemovedEventAvro scenarioRemovedEventAvro -> processEvent(hubId, scenarioRemovedEventAvro);
             default -> log.warn("Получено событие неизвестного типа {}", hubEvent);
         }
     }

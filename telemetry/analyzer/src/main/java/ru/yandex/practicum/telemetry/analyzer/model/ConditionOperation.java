@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.analyzer.dal.entity;
+package ru.yandex.practicum.telemetry.analyzer.model;
 
 import ru.yandex.practicum.kafka.telemetry.event.ConditionOperationAvro;
 

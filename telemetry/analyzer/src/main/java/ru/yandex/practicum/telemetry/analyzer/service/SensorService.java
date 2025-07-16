@@ -1,10 +1,10 @@
-package ru.yandex.practicum.telemetry.analyzer.dal.service;
+package ru.yandex.practicum.telemetry.analyzer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.Sensor;
-import ru.yandex.practicum.telemetry.analyzer.dal.repository.SensorRepository;
+import ru.yandex.practicum.telemetry.analyzer.model.Sensor;
+import ru.yandex.practicum.telemetry.analyzer.repository.SensorRepository;
 
 import java.util.Optional;
 
@@ -14,8 +14,8 @@ import java.util.Optional;
 public class SensorService {
     private final SensorRepository repository;
 
-    public Sensor save(Sensor sensor) {
-        return repository.save(sensor);
+    public void save(Sensor sensor) {
+        repository.save(sensor);
     }
 
     @Transactional(readOnly = true)

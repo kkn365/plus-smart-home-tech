@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.analyzer.dal.service;
+package ru.yandex.practicum.telemetry.analyzer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,15 +7,15 @@ import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceActionAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioConditionAvro;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.Action;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.Condition;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.ConditionOperation;
-import ru.yandex.practicum.telemetry.analyzer.dal.entity.Scenario;
-import ru.yandex.practicum.telemetry.analyzer.dal.repository.ActionRepository;
-import ru.yandex.practicum.telemetry.analyzer.dal.repository.ConditionRepository;
-import ru.yandex.practicum.telemetry.analyzer.dal.repository.ScenarioRepository;
-import ru.yandex.practicum.telemetry.analyzer.dal.repository.SensorRepository;
 import ru.yandex.practicum.telemetry.analyzer.exceptions.IllegalStateException;
+import ru.yandex.practicum.telemetry.analyzer.model.Action;
+import ru.yandex.practicum.telemetry.analyzer.model.Condition;
+import ru.yandex.practicum.telemetry.analyzer.model.ConditionOperation;
+import ru.yandex.practicum.telemetry.analyzer.model.Scenario;
+import ru.yandex.practicum.telemetry.analyzer.repository.ActionRepository;
+import ru.yandex.practicum.telemetry.analyzer.repository.ConditionRepository;
+import ru.yandex.practicum.telemetry.analyzer.repository.ScenarioRepository;
+import ru.yandex.practicum.telemetry.analyzer.repository.SensorRepository;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -31,20 +31,20 @@ public class ScenarioService {
     private final ActionRepository actionRepository;
     private final SensorRepository sensorRepository;
 
-    public Scenario save(ScenarioAddedEventAvro event, String hubId) {
+    public void save(ScenarioAddedEventAvro event, String hubId) {
         Set<String> sensors = new HashSet<>();
         event.getConditions().forEach(condition -> sensors.add(condition.getSensorId()));
         event.getActions().forEach(action -> sensors.add(action.getSensorId()));
 
         boolean allSensorsExists = sensorRepository.existsByIdInAndHubId(sensors, hubId);
-        if(!allSensorsExists) {
+        if (!allSensorsExists) {
             throw new IllegalStateException("Нет возможности создать сценарий с использованием неизвестного устройства");
         }
 
         Optional<Scenario> maybeExist = scenarioRepository.findByHubIdAndName(hubId, event.getName());
 
         Scenario scenario;
-        if(maybeExist.isEmpty()) {
+        if (maybeExist.isEmpty()) {
             scenario = new Scenario();
             scenario.setName(event.getName());
             scenario.setHubId(hubId);
@@ -71,7 +71,7 @@ public class ScenarioService {
         for (DeviceActionAvro eventAction : event.getActions()) {
             Action action = new Action();
             action.setType(eventAction.getType());
-            if(eventAction.getType().equals(ActionTypeAvro.SET_VALUE)) {
+            if (eventAction.getType().equals(ActionTypeAvro.SET_VALUE)) {
                 action.setValue(mapValue(eventAction.getValue()));
             }
 
@@ -80,12 +80,12 @@ public class ScenarioService {
 
         conditionRepository.saveAll(scenario.getConditions().values());
         actionRepository.saveAll(scenario.getActions().values());
-        return scenarioRepository.save(scenario);
+        scenarioRepository.save(scenario);
     }
 
     public void delete(String name, String hubId) {
         Optional<Scenario> optScenario = scenarioRepository.findByHubIdAndName(hubId, name);
-        if(optScenario.isPresent()) {
+        if (optScenario.isPresent()) {
             Scenario scenario = optScenario.get();
             conditionRepository.deleteAll(scenario.getConditions().values());
             actionRepository.deleteAll(scenario.getActions().values());
