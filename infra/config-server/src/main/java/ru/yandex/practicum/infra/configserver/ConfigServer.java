@@ -1,4 +1,4 @@
-package ru.yandex.practicum.infra.sonfigserver;
+package ru.yandex.practicum.infra.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
