@@ -1,0 +1,30 @@
+package ru.yandex.practicum.commerce.api.warehouse.client;
+
+import feign.FeignException;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.commerce.api.cart.dto.ShoppingCartDto;
+import ru.yandex.practicum.commerce.api.warehouse.dto.AddProductToWarehouseRequest;
+import ru.yandex.practicum.commerce.api.warehouse.dto.AddressDto;
+import ru.yandex.practicum.commerce.api.warehouse.dto.BookedProductsDto;
+import ru.yandex.practicum.commerce.api.warehouse.dto.NewProductInWarehouseRequest;
+
+@FeignClient(name = "warehouse-service", path = "/api/v1/warehouse")
+public interface WarehouseClient {
+
+    @PutMapping
+    void addProduct (@RequestBody NewProductInWarehouseRequest request) throws FeignException;
+
+    @PostMapping("/check")
+    BookedProductsDto checkProductCount(@RequestBody ShoppingCartDto shoppingCartDto) throws FeignException;
+
+    @PostMapping("/add")
+    void addProductQuantity(@RequestBody AddProductToWarehouseRequest request) throws FeignException;
+
+    @GetMapping("/address")
+    AddressDto getWarehouseAddress() throws FeignException;
+
+}

@@ -34,24 +34,48 @@ services:
                              --bootstrap-server kafka:29092'"
     init: true
 
-  db:
+  analyzer-db:
     image: postgres:16.1
     container_name: postgres-analyzer
-    hostname: postgres_data
+    hostname: postgres_analyzer_data
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: telemetry
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: telemetry
+      - POSTGRES_DB=analyzer
+      - POSTGRES_USER=analyzer
+      - POSTGRES_PASSWORD=analyzer
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
       interval: 5s
       retries: 10
+      start_period: 20s
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_analyzer_data:/var/lib/postgresql/data
       - ./telemetry/analyzer/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
+  commerce-db:
+    image: postgres:16.1
+    container_name: postgres-commerce
+    hostname: postgres_commerce_data
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=commerce
+      - POSTGRES_USER=commerce
+      - POSTGRES_PASSWORD=commerce
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - postgres_commerce_data:/var/lib/postgresql/data
+      - ./commerce/shopping-cart/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema-01.sql
+      - ./commerce/shopping-store/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema-02.sql
+      - ./commerce/warehouse/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema-03.sql
+
 volumes:
-  postgres_data:
+  postgres_analyzer_data:
+  postgres_commerce_data:
