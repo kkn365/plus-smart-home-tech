@@ -12,4 +12,4 @@ spring:
       temp.use_jdbc_metadata_defaults: false
     hibernate.ddl-auto: none
     show-sql: false
-  sql.init.mode: never
+  sql.init.mode: always
