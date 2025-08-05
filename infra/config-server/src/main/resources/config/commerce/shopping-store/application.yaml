@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/commerce
-    username: commerce
-    password: commerce
+    url: jdbc:postgresql://localhost:5432/shopping_store_db
+    username: shopping_store_app
+    password: Pa$$word
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties.hibernate:
@@ -12,4 +12,4 @@ spring:
       temp.use_jdbc_metadata_defaults: false
     hibernate.ddl-auto: none
     show-sql: false
-  sql.init.mode: always
+  sql.init.mode: never

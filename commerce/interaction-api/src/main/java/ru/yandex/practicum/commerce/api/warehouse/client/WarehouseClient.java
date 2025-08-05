@@ -1,6 +1,7 @@
 package ru.yandex.practicum.commerce.api.warehouse.client;
 
 import feign.FeignException;
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +17,13 @@ import ru.yandex.practicum.commerce.api.warehouse.dto.NewProductInWarehouseReque
 public interface WarehouseClient {
 
     @PutMapping
-    void addProduct (@RequestBody NewProductInWarehouseRequest request) throws FeignException;
+    void addProduct (@RequestBody @Valid NewProductInWarehouseRequest request) throws FeignException;
 
     @PostMapping("/check")
-    BookedProductsDto checkProductCount(@RequestBody ShoppingCartDto shoppingCartDto) throws FeignException;
+    BookedProductsDto checkProductCount(@RequestBody @Valid ShoppingCartDto shoppingCartDto) throws FeignException;
 
     @PostMapping("/add")
-    void addProductQuantity(@RequestBody AddProductToWarehouseRequest request) throws FeignException;
+    void addProductQuantity(@RequestBody @Valid AddProductToWarehouseRequest request) throws FeignException;
 
     @GetMapping("/address")
     AddressDto getWarehouseAddress() throws FeignException;

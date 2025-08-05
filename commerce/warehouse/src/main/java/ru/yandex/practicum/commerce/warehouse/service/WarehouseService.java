@@ -42,7 +42,7 @@ public class WarehouseService {
 
     public BookedProductsDto checkProductCount(ShoppingCartDto shoppingCartDto) {
         BookedProducts bookedProducts = new BookedProducts();
-        shoppingCartDto.getProducts().forEach((productId, quantity) -> {
+        shoppingCartDto.products().forEach((productId, quantity) -> {
             WarehouseProduct warehouseProduct = findWarehouseProductById(productId);
             if(warehouseProduct.getQuantity() < quantity) {
                 throw new ProductInShoppingCartLowQuantityInWarehouse("There is not enough product in the warehouse " +

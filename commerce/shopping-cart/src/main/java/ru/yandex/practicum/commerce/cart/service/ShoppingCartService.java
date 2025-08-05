@@ -13,6 +13,7 @@ import ru.yandex.practicum.commerce.cart.mapper.ShoppingCartMapper;
 import ru.yandex.practicum.commerce.cart.repository.ShoppingCartRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,8 +21,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ShoppingCartService {
-    private static final int LIMITED_COUNT = 5;
-    private static final int ENOUGH_COUNT = 20;
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
 
@@ -52,12 +51,11 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public ShoppingCartDto removeProducts(String username, Map<UUID, Integer> products) {
+    public ShoppingCartDto removeProducts(String username, List<UUID> products) {
         validateUsername(username);
         ShoppingCart shoppingCart = getActiveShoppingCart(username);
-        products.forEach((key, value) -> {
-            updateProductQuantity(shoppingCart, key, -value);
-            shoppingCart.getProducts().put(key, -value);
+        products.forEach(key -> {
+            shoppingCart.getProducts().remove(key);
         });
         shoppingCartRepository.save(shoppingCart);
         ShoppingCartDto shoppingCartDto = shoppingCartMapper.toShoppingCartDto(shoppingCart);

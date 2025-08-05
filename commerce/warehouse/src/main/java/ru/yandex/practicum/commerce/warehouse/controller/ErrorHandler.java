@@ -19,31 +19,41 @@ public class ErrorHandler {
     @ExceptionHandler(SpecifiedProductAlreadyInWarehouseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleSpecifiedProductAlreadyInWarehouseException(SpecifiedProductAlreadyInWarehouseException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.BAD_REQUEST, "product already registered", ex);
     }
 
     @ExceptionHandler(NoSpecifiedProductInWarehouseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNoSpecifiedProductInWarehouseException(NoSpecifiedProductInWarehouseException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.BAD_REQUEST, "product not found", ex);
     }
 
     @ExceptionHandler(ProductInShoppingCartLowQuantityInWarehouse.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleProductInShoppingCartLowQuantityInWarehouse(ProductInShoppingCartLowQuantityInWarehouse ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.BAD_REQUEST, "product not enough", ex);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleInternalServerErrorException(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
+        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", ex);
     }
 
     private ErrorResponse errorResponse(HttpStatus status, String userMessage, Throwable ex) {
         return ErrorResponse.builder()
                 .cause(ex.getCause())
-                .stackTrace(List.of(ex.getStackTrace()))
                 .httpStatus(status.name())
                 .userMessage(userMessage)
                 .message(ex.getMessage())

@@ -13,7 +13,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
     private Throwable cause;
-    private List<StackTraceElement> stackTrace;
     private String httpStatus;
     private String userMessage;
     private String message;

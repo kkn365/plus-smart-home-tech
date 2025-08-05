@@ -13,44 +13,55 @@ import ru.yandex.practicum.commerce.cart.exception.ProductNotAvailableException;
 
 import java.util.List;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(NoProductsInShoppingCartException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotAuthorizedUserException(NoProductsInShoppingCartException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.BAD_REQUEST, "Cart is empty", ex);
     }
 
     @ExceptionHandler(NotAuthorizedUserException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleNotAuthorizedUserException(NotAuthorizedUserException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.UNAUTHORIZED, "Unauthorized user", ex);
     }
 
     @ExceptionHandler(ProductNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleProductNotAvailableException(ProductNotAvailableException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.BAD_REQUEST, "Product unavailable", ex);
     }
 
     @ExceptionHandler(CartNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleCartNotFoundException(CartNotFoundException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.NOT_FOUND, "Cart not found", ex);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleInternalServerErrorException(InternalServerErrorException ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
+        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", ex);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", ex);
     }
 
     private ErrorResponse errorResponse(HttpStatus status, String userMessage, Throwable ex) {
         return ErrorResponse.builder()
                 .cause(ex.getCause())
-                .stackTrace(List.of(ex.getStackTrace()))
                 .httpStatus(status.name())
                 .userMessage(userMessage)
                 .message(ex.getMessage())

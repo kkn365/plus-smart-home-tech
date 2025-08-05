@@ -10,26 +10,34 @@ import ru.yandex.practicum.commerce.store.exception.ProductNotFoundException;
 
 import java.util.List;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleProductNotFoundException(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.NOT_FOUND, "Продукт не найден", ex);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleInternalServerErrorException(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
         return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера", ex);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(Throwable ex) {
+        log.error(ex.getMessage(), ex.getLocalizedMessage());
+        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", ex);
     }
 
     private ErrorResponse errorResponse(HttpStatus status, String userMessage, Throwable ex) {
         return ErrorResponse.builder()
                 .cause(ex.getCause())
-                .stackTrace(List.of(ex.getStackTrace()))
                 .httpStatus(status.name())
                 .userMessage(userMessage)
                 .message(ex.getMessage())
