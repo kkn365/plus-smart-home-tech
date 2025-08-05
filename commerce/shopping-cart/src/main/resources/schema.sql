@@ -1,7 +1,6 @@
 CREATE USER shopping_cart_app WITH PASSWORD 'Pa$$word';
 CREATE DATABASE shopping_cart_db;
 GRANT ALL PRIVILEGES ON DATABASE shopping_cart_db TO shopping_cart_app;
-\connect shopping_cart_db;
 
 CREATE TABLE IF NOT EXISTS shopping_carts (
     shopping_cart_id UUID PRIMARY KEY      DEFAULT gen_random_uuid(),

@@ -1,7 +1,6 @@
 CREATE USER analyzer_app WITH PASSWORD 'Pa$$word';
 CREATE DATABASE analyzer_db;
 GRANT ALL PRIVILEGES ON DATABASE analyzer_db TO analyzer_app;
-\connect analyzer_db;
 
 CREATE TABLE IF NOT EXISTS scenarios (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
