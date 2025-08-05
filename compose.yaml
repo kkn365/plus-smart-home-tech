@@ -41,7 +41,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=analyzer_db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=Pa$$word
     healthcheck:
