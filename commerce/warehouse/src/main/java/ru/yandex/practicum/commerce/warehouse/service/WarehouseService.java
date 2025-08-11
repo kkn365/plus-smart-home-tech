@@ -17,6 +17,8 @@ import ru.yandex.practicum.commerce.warehouse.mapper.WarehouseMapper;
 import ru.yandex.practicum.commerce.warehouse.repository.WarehouseRepository;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -68,6 +70,17 @@ public class WarehouseService {
 
     public AddressDto getWarehouseAddress() {
         return new AddressDto(CURRENT_ADDRESS, CURRENT_ADDRESS, CURRENT_ADDRESS, CURRENT_ADDRESS, CURRENT_ADDRESS);
+    }
+
+    public void returnProductsToWarehouse(Map<UUID, Long> products) {
+        List<WarehouseProduct> warehouseProducts = warehouseRepository.findAllById(products.keySet());
+        if(warehouseProducts.isEmpty()) {
+            return;
+        }
+        warehouseProducts.forEach(warehouseProduct ->
+                warehouseProduct.setQuantity(warehouseProduct.getQuantity() +
+                                             products.get(warehouseProduct.getProductId())));
+        warehouseRepository.saveAll(warehouseProducts);
     }
 
     private WarehouseProduct findWarehouseProductById(UUID productId) {
