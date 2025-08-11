@@ -9,9 +9,9 @@ import ru.yandex.practicum.commerce.api.payment.dto.PaymentDto;
 import ru.yandex.practicum.commerce.api.payment.dto.enums.PaymentStatus;
 import ru.yandex.practicum.commerce.api.store.client.ShoppingStoreClient;
 import ru.yandex.practicum.commerce.api.store.dto.ProductDto;
-import ru.yandex.practicum.commerce.order.exception.NoOrderFoundException;
+import ru.yandex.practicum.commerce.api.exception.order.NoOrderFoundException;
 import ru.yandex.practicum.commerce.payment.entity.PaymentEntity;
-import ru.yandex.practicum.commerce.payment.exception.NotEnoughInfoInOrderToCalculateException;
+import ru.yandex.practicum.commerce.api.exception.payment.NotEnoughInfoInOrderToCalculateException;
 import ru.yandex.practicum.commerce.payment.mapper.PaymentMapper;
 import ru.yandex.practicum.commerce.payment.repository.PaymentRepository;
 

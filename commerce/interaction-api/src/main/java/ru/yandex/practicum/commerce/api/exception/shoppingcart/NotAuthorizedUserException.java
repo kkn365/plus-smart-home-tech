@@ -1,4 +1,4 @@
-package ru.yandex.practicum.commerce.cart.exception;
+package ru.yandex.practicum.commerce.api.exception.shoppingcart;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

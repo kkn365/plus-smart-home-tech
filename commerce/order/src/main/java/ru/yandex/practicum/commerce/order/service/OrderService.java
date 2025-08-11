@@ -14,7 +14,7 @@ import ru.yandex.practicum.commerce.api.warehouse.client.WarehouseClient;
 import ru.yandex.practicum.commerce.api.warehouse.dto.AssemblyProductsForOrderRequest;
 import ru.yandex.practicum.commerce.api.warehouse.dto.BookedProductsDto;
 import ru.yandex.practicum.commerce.order.entity.OrderEntity;
-import ru.yandex.practicum.commerce.order.exception.NoOrderFoundException;
+import ru.yandex.practicum.commerce.api.exception.order.NoOrderFoundException;
 import ru.yandex.practicum.commerce.order.mapper.OrderMapper;
 import ru.yandex.practicum.commerce.order.repository.OrderRepository;
 

@@ -10,9 +10,9 @@ import ru.yandex.practicum.commerce.api.warehouse.dto.BookedProductsDto;
 import ru.yandex.practicum.commerce.api.warehouse.dto.NewProductInWarehouseRequest;
 import ru.yandex.practicum.commerce.warehouse.entity.BookedProducts;
 import ru.yandex.practicum.commerce.warehouse.entity.WarehouseProduct;
-import ru.yandex.practicum.commerce.warehouse.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.commerce.warehouse.exception.ProductInShoppingCartLowQuantityInWarehouse;
-import ru.yandex.practicum.commerce.warehouse.exception.SpecifiedProductAlreadyInWarehouseException;
+import ru.yandex.practicum.commerce.api.exception.warehouse.NoSpecifiedProductInWarehouseException;
+import ru.yandex.practicum.commerce.api.exception.warehouse.ProductInShoppingCartLowQuantityInWarehouse;
+import ru.yandex.practicum.commerce.api.exception.warehouse.SpecifiedProductAlreadyInWarehouseException;
 import ru.yandex.practicum.commerce.warehouse.mapper.WarehouseMapper;
 import ru.yandex.practicum.commerce.warehouse.repository.WarehouseRepository;
 
