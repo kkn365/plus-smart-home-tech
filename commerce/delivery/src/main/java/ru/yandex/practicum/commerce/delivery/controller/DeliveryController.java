@@ -17,7 +17,7 @@ import java.util.UUID;
 @RestController
 public class DeliveryController implements DeliveryClient {
 
-    final DeliveryService deliveryService;
+    private final DeliveryService deliveryService;
 
     @Override
     public DeliveryDto addDelivery(DeliveryDto newDelivery) {

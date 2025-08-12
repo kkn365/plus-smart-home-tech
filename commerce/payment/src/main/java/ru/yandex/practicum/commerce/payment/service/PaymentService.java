@@ -28,7 +28,7 @@ public class PaymentService {
     private final ShoppingStoreClient shoppingStore;
     private final PaymentMapper paymentMapper;
 
-    final static BigDecimal TAX_RATE = BigDecimal.valueOf(1.1);
+    private final static BigDecimal TAX_RATE = BigDecimal.valueOf(1.1);
 
     @Transactional
     public PaymentDto doPayment(OrderDto order) {
